@@ -10,16 +10,28 @@ function App() {
   return (
     <div class="App">
       <header class="header"></header>
-      <Switch fallback={"Failed to load"}>
+      <Switch
+        fallback={
+          <article class="message">
+            <h3>Failed to load article.</h3>
+          </article>
+        }
+      >
         <Match when={issue.loading}>
           <Loading />
         </Match>
         <Match when={issue()}>
           {(sections) => (
-            <For each={sections} fallback={<h1>lmao</h1>}>
+            <For each={sections}>
               {(item) => (
                 <article>
                   <Switch>
+                    <Match when={item.title || item.message}>
+                      <div class="message">
+                        <h3>{item.title}</h3>
+                        <h3>{item.message}</h3>
+                      </div>
+                    </Match>
                     <Match when={item.type === "issue"}>
                       <h1>{item.headlineSummary}</h1>
                       <p class="ss date">
@@ -46,7 +58,10 @@ function App() {
                               (item.image || item.leaderImage)
                             }
                           />
-                          <p class="credit">Photo: {item.pictureCredit || item.leaderPictureCredit}</p>
+                          <p class="credit">
+                            Photo:{" "}
+                            {item.pictureCredit || item.leaderPictureCredit}
+                          </p>
                         </div>
                       ) : (
                         <></>

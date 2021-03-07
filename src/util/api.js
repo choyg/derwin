@@ -1,4 +1,4 @@
-import { getISO } from "./date";
+import { dateFmt, getISO } from "./date";
 import { store } from "./storage";
 
 const headers = {
@@ -19,7 +19,9 @@ const loadIssues = async (region) => {
   //.https://expresso.economist.com/api/v1/issue/${region}/${date}/json
 
   // `https://espresso.economist.com/api/v1/issue/${region}/json`,
-  const res = await fetch(`https://yellow-truth-3e36.adultspinach.workers.dev?region=`+region);
+  const res = await fetch(
+    `https://yellow-truth-3e36.adultspinach.workers.dev?region=` + region
+  );
 
   if (!res.ok) {
     throw new Error(res);
@@ -27,7 +29,7 @@ const loadIssues = async (region) => {
 
   const issues = await res.json();
   issues.forEach((day) => {
-    if (day.type === 'advertChecksum') {
+    if (day.type === "advertChecksum") {
       return;
     }
     store.setItem(`ISSUE-${region}-${day.issueDate}`, JSON.stringify(day));
@@ -60,6 +62,8 @@ export const getBundle = async ({ region, date }) => {
     date = getISO(new Date());
   }
 
+  document.title = dateFmt(new Date(date + "T00:00"));
+
   const bundleCache = store.getItem(`BUNDLE-${region}-${date}`);
   if (bundleCache) {
     return JSON.parse(bundleCache);
@@ -78,7 +82,7 @@ export const getBundle = async ({ region, date }) => {
   issue = JSON.parse(issue);
   if (issue.type === "weekend" || !issue.bundleUri) {
     if (issue.title || issue.message) {
-      return issue;
+      return [issue];
     }
     return undefined;
   }

@@ -112,6 +112,10 @@ a:hover {
   font-size: 0.7em;
 }
 
+.message {
+  height: 80vh;
+}
+
 @media (min-width: 680px) {
   article img {
     padding: 0 18px;
@@ -137,5 +141,11 @@ a:hover {
   footer a,
   .credit {
     color: rgb(107, 114, 128);
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: rgb(219, 223, 229);
   }
 }
