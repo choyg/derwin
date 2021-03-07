@@ -56,8 +56,6 @@ export const loadBundle = async (url, region, date) => {
  * @param {string | null} date YYYY-MM-DD
  */
 export const getBundle = async ({ region, date }) => {
-  // await fetch('https://expresso.economist.com/api/v1/issue/AP/2021-03-06/json')
-  // return j;
   if (!date) {
     date = getISO(new Date());
   }
