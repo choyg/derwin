@@ -2,14 +2,17 @@ import "./App.css";
 import { createResource, Match } from "solid-js";
 import { Loading } from "./components/Loading";
 import { getBundle } from "./util/api";
-import { dateFmt, getRegion, regionTxt } from "./util/date";
+import { dateFmt, getRegion, regionTxt, getDate } from "./util/date";
+import {Header} from "./components/Header";
 
 function App() {
-  let [issue] = createResource(() => ({ region: getRegion() }), getBundle);
+  let [bundle] = createResource(
+    () => ({region: getRegion(), date: getDate()}), getBundle
+  );
 
   return (
     <div class="App">
-      <header class="header"></header>
+      <Header />
       <Switch
         fallback={
           <article class="message">
@@ -17,10 +20,10 @@ function App() {
           </article>
         }
       >
-        <Match when={issue.loading}>
+        <Match when={bundle.loading}>
           <Loading />
         </Match>
-        <Match when={issue()}>
+        <Match when={bundle()}>
           {(sections) => (
             <For each={sections}>
               {(item) => (
@@ -77,11 +80,8 @@ function App() {
       </Switch>
       <footer>
         <div class="regions">
-          <a href="/?region=US">US</a>
-          <a href="/?region=EU">EU</a>
-          <a href="/?region=AP">Asia</a>
         </div>
-        <a href="https://github.com/choyg/derwin">GitHub</a>
+        <a class="ss" href="https://github.com/choyg/derwin">GitHub</a>
       </footer>
     </div>
   );

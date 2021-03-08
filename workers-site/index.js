@@ -30,10 +30,15 @@ async function handleEvent(event) {
     mapRequestToAsset: serveSinglePageApp
   }
 
-  if (!url.pathname.endsWith('.html')) {
-    options.cacheControl =  {
+  if (url.pathname.endsWith('.html')) {
+    options.cacheControl = {
+      browserTTL: 3600
+    }
+  } else {
+    options.cacheControl = {
       browserTTL: 604800
     }
+
   }
 
   /**

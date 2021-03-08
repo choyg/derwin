@@ -10,7 +10,7 @@ const headers = {
 /**
  * @param {'US' | 'EU' | 'AP'} region
  * @param {string | null} date YYYY-MM-DD
- * @returns {Promise<any[]>}
+ * @returns {Promise<{[key: string]: Object}>}
  */
 const loadIssues = async (region) => {
   // A JSON API is exposed within the 'bundle.v1/issue/EU/json. However it does
@@ -28,14 +28,17 @@ const loadIssues = async (region) => {
   }
 
   const issues = await res.json();
+  const issueMap = {};
   issues.forEach((day) => {
     if (day.type === "advertChecksum") {
       return;
     }
-    store.setItem(`ISSUE-${region}-${day.issueDate}`, JSON.stringify(day));
+    const key = `ISSUE-${region}-${day.issueDate}`;
+    issueMap[key] = day;
+    //store.setItem(key, JSON.stringify(day));
   });
 
-  return issues;
+  return issueMap;
 };
 
 export const loadBundle = async (url, region, date) => {
@@ -46,7 +49,7 @@ export const loadBundle = async (url, region, date) => {
 
   const text = await res.text();
 
-  store.setItem(`BUNDLE-${region}-${date}`, text);
+  //store.setItem(`BUNDLE-${region}-${date}`, text);
 
   return JSON.parse(text);
 };
@@ -68,16 +71,17 @@ export const getBundle = async ({ region, date }) => {
   }
 
   let issue = store.getItem(`ISSUE-${region}-${date}`);
-  if (!issue) {
-    await loadIssues(region);
-    issue = store.getItem(`ISSUE-${region}-${date}`);
+  if (issue) {
+    issue = JSON.parse(issue);
+  } else {
+    const issues = await loadIssues(region);
+    issue = issues[`ISSUE-${region}-${date}`];
   }
 
   if (!issue) {
     return undefined;
   }
 
-  issue = JSON.parse(issue);
   if (issue.type === "weekend" || !issue.bundleUri) {
     if (issue.title || issue.message) {
       return [issue];
