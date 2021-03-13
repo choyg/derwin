@@ -12,13 +12,15 @@ export const Header = () => {
 
   return (
     <div class="header">
-      <For each={timeline}>
-        {item => (
-          <a class="ss" href={`/${getISO(item)}`}>
-            {fmt.format(item)}
-          </a>
-        )}
-      </For>
+      <div class="container">
+        <For each={timeline}>
+          {item => (
+            <a class="ss" href={`/${getISO(item)}`}>
+              {fmt.format(item)}
+            </a>
+          )}
+        </For>
+      </div>
     </div>
   );
 };
