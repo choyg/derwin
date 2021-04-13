@@ -157,6 +157,10 @@ footer a,
     background-color: rgb(21, 22, 28);
     color: rgb(229, 230, 235);
   }
+  
+  a {
+    color: rgb(4, 120, 87);
+  }
 
   .header a,
   footer a,
