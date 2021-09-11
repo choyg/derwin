@@ -95,7 +95,6 @@ article img {
   width: 100%;
   margin: 4px 0;
   display: flex;
-  max-height: 400px;
   object-fit: cover;
   object-position: 50% 10%;
 }
